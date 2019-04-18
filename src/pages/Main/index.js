@@ -13,10 +13,10 @@ export default class Main extends Component {
         e.preventDefault();
 
         const response = await api.post('/boxes', {
-            titel: this.state.newBox,
+            title: this.state.newBox,
         });
 
-        console.log(response.data);
+        this.props.history.push(`/box/${response.data._id}`);
     };
 
     handleInputChange = (e) => {
