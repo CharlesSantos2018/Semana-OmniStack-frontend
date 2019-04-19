@@ -3,6 +3,7 @@ import api from '../../services/api';
 import { distanceInWords } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import Dropzone from 'react-dropzone';
+import socket from 'socket.io-client';
 
 import { MdInsertDriveFile } from 'react-icons/md';
 
@@ -22,8 +23,17 @@ export default class Box extends Component {
   }
 
   subscribeToNewFiles = () => {
+    const box = this.props.match.params.id;
+    const io = socket('https://omnistack-backend11.herokuapp.com');
 
-  }
+    io.emit('connectRoom', box);
+
+    io.on('file', data => {
+      this.setState({
+        box: { ... this.state.box, files: [data, ... this.state.box.files] }
+      });
+    });
+  };
 
   handleUpload = (files) => {
     files.forEach(file => {
